@@ -2,12 +2,12 @@ package datawave.util.time;
 
 import java.util.concurrent.TimeUnit;
 
-import org.apache.accumulo.core.trace.Span;
-import org.apache.accumulo.core.trace.Trace;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import datawave.webservice.query.runner.Span;
+import datawave.webservice.query.runner.Trace;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Utility for measuring the time taken to perform some operation.

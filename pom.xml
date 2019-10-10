@@ -8,7 +8,7 @@
         <relativePath />
     </parent>
     <artifactId>accumulo-utils</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
     <url>https://code.nsa.gov/datawave-accumulo-utils</url>
     <licenses>
         <license>
@@ -22,12 +22,13 @@
         <url>https://github.com/NationalSecurityAgency/datawave-accumulo-utils</url>
     </scm>
     <properties>
-        <version.accumulo>1.9.2</version.accumulo>
-        <version.authorization-api>1.4</version.authorization-api>
+        <version.accumulo>2.0.0</version.accumulo>
+        <version.authorization-api>2.0.0-SNAPSHOT</version.authorization-api>
+        <version.commons-beanutils>1.9.4</version.commons-beanutils>
         <version.commons-collections>4.2</version.commons-collections>
         <!-- Guava 15 is needed for Accumulo on the tservers -->
         <version.guava>15.0</version.guava>
-        <version.in-memory-accumulo>1.9.2.1</version.in-memory-accumulo>
+        <version.in-memory-accumulo>2.0.1-SNAPSHOT</version.in-memory-accumulo>
         <version.slf4j>1.7.26</version.slf4j>
         <version.spring>5.0.8.RELEASE</version.spring>
     </properties>
@@ -37,6 +38,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${version.guava}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${version.commons-beanutils}</version>
             </dependency>
             <dependency>
                 <groupId>gov.nsa.datawave.microservice</groupId>
@@ -122,6 +128,10 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
         </dependency>
         <dependency>
             <groupId>gov.nsa.datawave.microservice</groupId>
