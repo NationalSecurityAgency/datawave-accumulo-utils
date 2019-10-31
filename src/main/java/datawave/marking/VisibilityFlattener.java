@@ -8,6 +8,8 @@ import org.apache.accumulo.core.security.ColumnVisibility.NodeComparator;
 import org.apache.accumulo.core.security.ColumnVisibility.NodeType;
 import org.apache.hadoop.io.Text;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public class VisibilityFlattener {
     public static ColumnVisibility flatten(Node root, byte[] expression, boolean sort) {
         StringBuilder out = new StringBuilder();
@@ -23,7 +25,7 @@ public class VisibilityFlattener {
     
     private static void flatten(Node root, byte[] expression, StringBuilder out, boolean sort) {
         if (root.getType() == NodeType.TERM)
-            out.append(new String(expression, root.getTermStart(), root.getTermEnd() - root.getTermStart()));
+            out.append(new String(expression, root.getTermStart(), root.getTermEnd() - root.getTermStart(), UTF_8));
         else {
             String sep = "";
             Node[] children = root.getChildren().toArray(new Node[] {});
