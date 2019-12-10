@@ -26,6 +26,7 @@
         <version.authorization-api>2.0.0-SNAPSHOT</version.authorization-api>
         <version.commons-beanutils>1.9.4</version.commons-beanutils>
         <version.commons-collections>4.2</version.commons-collections>
+        <version.commons-lang>2.6</version.commons-lang>
         <!-- Guava 15 is needed for Accumulo on the tservers -->
         <version.guava>15.0</version.guava>
         <version.in-memory-accumulo>2.0.1-SNAPSHOT</version.in-memory-accumulo>
@@ -87,6 +88,11 @@
                         <groupId>junit</groupId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.accumulo</groupId>
+                <artifactId>accumulo-trace</artifactId>
+                <version>${version.accumulo}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>

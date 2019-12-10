@@ -2,12 +2,11 @@ package datawave.util.time;
 
 import java.util.concurrent.TimeUnit;
 
-import datawave.webservice.query.runner.Span;
-import datawave.webservice.query.runner.Trace;
-
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.htrace.Trace;
+import org.apache.htrace.TraceScope;
 
 /**
  * Utility for measuring the time taken to perform some operation.
@@ -16,7 +15,7 @@ public class TraceStopwatch {
     
     protected final String description;
     protected final Stopwatch sw;
-    protected Span span;
+    protected TraceScope span;
     
     public TraceStopwatch(String description) {
         Preconditions.checkNotNull(description);
@@ -35,19 +34,19 @@ public class TraceStopwatch {
     }
     
     public void start() {
-        span = Trace.start(description);
+        span = Trace.startSpan(description);
         this.sw.start();
     }
     
     public void data(String name, String value) {
-        span.data(name, value);
+        span.getSpan().addKVAnnotation(name, value);
     }
     
     public void stop() {
         this.sw.stop();
         
         if (null != span) {
-            span.stop();
+            span.getSpan().stop();
         }
     }
     
