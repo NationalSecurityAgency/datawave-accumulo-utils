@@ -5,12 +5,13 @@ import com.google.common.collect.Sets;
 import datawave.security.authorization.DatawaveUser;
 import datawave.security.authorization.SubjectIssuerDNPair;
 import org.apache.accumulo.core.security.Authorizations;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserAuthFunctionsTest {
     
@@ -26,7 +27,7 @@ public class UserAuthFunctionsTest {
     private DatawaveUser p2;
     private Collection<DatawaveUser> proxyChain;
     
-    @Before
+    @BeforeEach
     public void initialize() {
         requestedAuths = "A,C";
         userAuths = new HashSet<>();
@@ -49,17 +50,17 @@ public class UserAuthFunctionsTest {
         assertEquals(expected, UAF.mergeAuthorizations(UAF.getRequestedAuthorizations(requestedAuths, user), proxyChain, u -> u != user));
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testUserRequestsAuthTheyDontHave() {
         requestedAuths = "A,C,D,X,Y,Z";
-        UAF.getRequestedAuthorizations(requestedAuths, user);
+        assertThrows(IllegalArgumentException.class, () -> UAF.getRequestedAuthorizations(requestedAuths, user));
     }
     
     @Test
     public void testUserAuthsFirstInMergedSet() {
         HashSet<Authorizations> mergedAuths = UAF.mergeAuthorizations(UAF.getRequestedAuthorizations(requestedAuths, user), proxyChain, u -> u != user);
         assertEquals(3, mergedAuths.size());
-        assertEquals("Merged user authorizations were not first in the return set", new Authorizations("A", "C"), mergedAuths.iterator().next());
+        assertEquals(new Authorizations("A", "C"), mergedAuths.iterator().next(), "Merged user authorizations were not first in the return set");
     }
     
     @Test

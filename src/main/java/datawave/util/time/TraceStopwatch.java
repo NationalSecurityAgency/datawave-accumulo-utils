@@ -45,7 +45,7 @@ public class TraceStopwatch {
     public void stop() {
         this.sw.stop();
         
-        if (null != span) {
+        if (null != span && null != span.getSpan()) {
             span.getSpan().stop();
         }
     }
