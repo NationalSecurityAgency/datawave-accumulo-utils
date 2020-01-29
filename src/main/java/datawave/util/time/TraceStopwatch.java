@@ -30,7 +30,6 @@ public class TraceStopwatch {
     }
     
     public boolean isRunning() {
-        // Wild on you
         return this.sw.isRunning();
     }
     
