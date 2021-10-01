@@ -25,11 +25,15 @@
         <version.accumulo>1.9.2</version.accumulo>
         <version.authorization-api>1.11-SNAPSHOT</version.authorization-api>
         <version.commons-collections>4.2</version.commons-collections>
+        <version.dropwizard>3.2.5</version.dropwizard>
         <!-- Guava 15 is needed for Accumulo on the tservers -->
         <version.guava>15.0</version.guava>
         <version.in-memory-accumulo>1.9.2.3</version.in-memory-accumulo>
         <version.slf4j>1.7.26</version.slf4j>
+        <!-- snappy and dropwizard required to allow miniaccumulo to work with upgraded zookeeper -->
+        <version.snappy>1.1.7</version.snappy>
         <version.spring>5.3.5</version.spring>
+        <version.zookeeper>3.6.3</version.zookeeper>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -42,6 +46,17 @@
                 <groupId>gov.nsa.datawave.microservice</groupId>
                 <artifactId>authorization-api</artifactId>
                 <version>${version.authorization-api}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-core</artifactId>
+                <version>${version.dropwizard}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>slf4j-api</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.accumulo</groupId>
@@ -83,9 +98,30 @@
                 </exclusions>
             </dependency>
             <dependency>
+                <groupId>org.apache.accumulo</groupId>
+                <artifactId>accumulo-minicluster</artifactId>
+                <version>${version.accumulo}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>guava</artifactId>
+                        <groupId>com.google.guava</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
                 <version>${version.commons-collections}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${version.zookeeper}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.xerial.snappy</groupId>
+                <artifactId>snappy-java</artifactId>
+                <version>${version.snappy}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -128,16 +164,32 @@
             <artifactId>authorization-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.accumulo</groupId>
             <artifactId>accumulo-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.accumulo</groupId>
+            <artifactId>accumulo-minicluster</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.xerial.snappy</groupId>
+            <artifactId>snappy-java</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
