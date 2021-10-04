@@ -64,6 +64,10 @@
                 <version>${version.accumulo}</version>
                 <exclusions>
                     <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>org.eclipse.jetty</groupId>
+                    </exclusion>
+                    <exclusion>
                         <artifactId>guava</artifactId>
                         <groupId>com.google.guava</groupId>
                     </exclusion>
@@ -102,6 +106,10 @@
                 <artifactId>accumulo-minicluster</artifactId>
                 <version>${version.accumulo}</version>
                 <exclusions>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>org.eclipse.jetty</groupId>
+                    </exclusion>
                     <exclusion>
                         <artifactId>guava</artifactId>
                         <groupId>com.google.guava</groupId>
