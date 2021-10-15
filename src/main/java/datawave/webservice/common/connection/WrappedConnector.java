@@ -161,6 +161,10 @@ public class WrappedConnector extends Connector {
         return real.namespaceOperations();
     }
     
+    public Connector getMock() {
+        return mock;
+    }
+    
     public Connector getReal() {
         return real;
     }
