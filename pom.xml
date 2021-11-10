@@ -8,7 +8,7 @@
         <relativePath />
     </parent>
     <artifactId>accumulo-utils</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>2.1.0-SNAPSHOT</version>
     <url>https://code.nsa.gov/datawave-accumulo-utils</url>
     <licenses>
         <license>
@@ -23,12 +23,12 @@
         <url>https://github.com/NationalSecurityAgency/datawave-accumulo-utils</url>
     </scm>
     <properties>
-        <version.accumulo>2.0.0</version.accumulo>
+        <version.accumulo>2.1.0-SNAPSHOT</version.accumulo>
         <version.authorization-api>2.0.0</version.authorization-api>
         <version.commons-beanutils>1.9.4</version.commons-beanutils>
         <version.commons-collections>4.4</version.commons-collections>
         <version.guava>28.1-jre</version.guava>
-        <version.in-memory-accumulo>2.0.1</version.in-memory-accumulo>
+        <version.in-memory-accumulo>2.1.0-SNAPSHOT</version.in-memory-accumulo>
         <version.slf4j>1.7.29</version.slf4j>
         <version.spring>5.2.2.RELEASE</version.spring>
     </properties>

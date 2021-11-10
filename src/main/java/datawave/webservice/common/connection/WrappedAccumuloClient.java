@@ -152,6 +152,11 @@ public class WrappedAccumuloClient implements AccumuloClient {
     }
     
     @Override
+    public ConditionalWriter createConditionalWriter(String tableName) throws TableNotFoundException {
+        return real.createConditionalWriter(tableName);
+    }
+    
+    @Override
     public Scanner createScanner(String tableName, Authorizations authorizations) throws TableNotFoundException {
         ScannerDelegate delegate;
         if (mock.tableOperations().list().contains(tableName)) {
@@ -230,6 +235,10 @@ public class WrappedAccumuloClient implements AccumuloClient {
     @Override
     public NamespaceOperations namespaceOperations() {
         return real.namespaceOperations();
+    }
+    
+    public AccumuloClient getMock() {
+        return mock;
     }
     
     public AccumuloClient getReal() {
