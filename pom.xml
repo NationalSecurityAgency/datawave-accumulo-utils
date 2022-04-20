@@ -23,13 +23,13 @@
         <url>https://github.com/NationalSecurityAgency/datawave-accumulo-utils</url>
     </scm>
     <properties>
-        <version.accumulo>1.9.2</version.accumulo>
-        <version.authorization-api>1.11-SNAPSHOT</version.authorization-api>
+        <version.accumulo>1.9.3</version.accumulo>
+        <version.authorization-api>1.14-SNAPSHOT</version.authorization-api>
         <version.commons-collections>4.2</version.commons-collections>
         <version.dropwizard>3.2.5</version.dropwizard>
         <!-- Guava 15 is needed for Accumulo on the tservers -->
         <version.guava>15.0</version.guava>
-        <version.in-memory-accumulo>1.9.2.3</version.in-memory-accumulo>
+        <version.in-memory-accumulo>1.9.3-SNAPSHOT</version.in-memory-accumulo>
         <version.slf4j>1.7.26</version.slf4j>
         <!-- snappy and dropwizard required to allow miniaccumulo to work with upgraded zookeeper -->
         <version.snappy>1.1.7</version.snappy>
