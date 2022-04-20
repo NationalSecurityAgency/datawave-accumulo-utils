@@ -3,8 +3,8 @@ package datawave.marking;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import org.apache.accumulo.core.security.ColumnVisibility;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
@@ -20,7 +20,7 @@ public class MarkingFunctionsDefaultCombineTest {
         ColumnVisibility twoAnna = new ColumnVisibility("A&C");
         
         ColumnVisibility combined = markingFunctions.combine(Sets.newHashSet(oneAnna, twoAnna));
-        Assert.assertEquals(new ColumnVisibility("A&B&C"), combined);
+        Assertions.assertEquals(new ColumnVisibility("A&B&C"), combined);
     }
     
     @Test
@@ -31,7 +31,7 @@ public class MarkingFunctionsDefaultCombineTest {
         ColumnVisibility twoOr = new ColumnVisibility("A|C");
         
         ColumnVisibility combined = markingFunctions.combine(Sets.newHashSet(oneOr, twoOr));
-        Assert.assertEquals(new ColumnVisibility("(A|B)&(A|C)"), combined);
+        Assertions.assertEquals(new ColumnVisibility("(A|B)&(A|C)"), combined);
     }
     
     @Test
@@ -43,7 +43,7 @@ public class MarkingFunctionsDefaultCombineTest {
         
         Map<String,String> expected = ImmutableMap.of(COLUMN_VISIBILITY, "A&B&C");
         
-        Assert.assertEquals(expected, markingFunctions.combine(mapOne, mapTwo));
+        Assertions.assertEquals(expected, markingFunctions.combine(mapOne, mapTwo));
     }
     
     @Test
@@ -55,6 +55,6 @@ public class MarkingFunctionsDefaultCombineTest {
         
         Map<String,String> expected = ImmutableMap.of(COLUMN_VISIBILITY, "(A|B)&(A|C)");
         
-        Assert.assertEquals(expected, markingFunctions.combine(mapOne, mapTwo));
+        Assertions.assertEquals(expected, markingFunctions.combine(mapOne, mapTwo));
     }
 }

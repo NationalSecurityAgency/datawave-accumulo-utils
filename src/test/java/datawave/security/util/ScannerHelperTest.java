@@ -1,9 +1,8 @@
 package datawave.security.util;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,17 +23,18 @@ import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.accumulo.core.security.ColumnVisibility;
-import org.junit.Before;
-import org.junit.Test;
 
 import com.google.common.collect.Lists;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ScannerHelperTest {
     
     public static String TABLE_NAME = "DATA";
     private Connector mockConnector;
     
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         InMemoryInstance instance = new InMemoryInstance();
         mockConnector = instance.getConnector("root", new PasswordToken(""));
@@ -73,12 +73,12 @@ public class ScannerHelperTest {
         
         Scanner scanner = ScannerHelper.createScanner(new WrappedConnector(mockConnector, mockConnector), TABLE_NAME, Arrays.asList(a1, a2, a3));
         for (Entry<Key,Value> entry : scanner) {
-            assertFalse("Ran out of expected keys but got: " + entry.getKey(), expectedKeys.isEmpty());
+            assertFalse(expectedKeys.isEmpty(), "Ran out of expected keys but got: " + entry.getKey());
             Key expectedKey = expectedKeys.remove(0);
             assertEquals(expectedKey, entry.getKey());
             assertEquals(expectedVal, entry.getValue());
         }
-        assertTrue("Scanner did not return all expected keys: " + expectedKeys, expectedKeys.isEmpty());
+        assertTrue(expectedKeys.isEmpty(), "Scanner did not return all expected keys: " + expectedKeys);
     }
     
     @Test
@@ -95,12 +95,12 @@ public class ScannerHelperTest {
         // Clearing the scan iterators should do nothing to the iterators added by ScannerHelper.createScanner
         scanner.clearScanIterators();
         for (Entry<Key,Value> entry : scanner) {
-            assertFalse("Ran out of expected keys but got: " + entry.getKey(), expectedKeys.isEmpty());
+            assertFalse(expectedKeys.isEmpty(), "Ran out of expected keys but got: " + entry.getKey());
             Key expectedKey = expectedKeys.remove(0);
             assertEquals(expectedKey, entry.getKey());
             assertEquals(expectedVal, entry.getValue());
         }
-        assertTrue("Scanner did not return all expected keys: " + expectedKeys, expectedKeys.isEmpty());
+        assertTrue(expectedKeys.isEmpty(), "Scanner did not return all expected keys: " + expectedKeys);
     }
     
     @Test
@@ -117,12 +117,12 @@ public class ScannerHelperTest {
         // Removing the scan iterator should do nothing to the iterators added by ScannerHelper.createScanner
         scanner.removeScanIterator("visibilityFilter10");
         for (Entry<Key,Value> entry : scanner) {
-            assertFalse("Ran out of expected keys but got: " + entry.getKey(), expectedKeys.isEmpty());
+            assertFalse(expectedKeys.isEmpty(), "Ran out of expected keys but got: " + entry.getKey());
             Key expectedKey = expectedKeys.remove(0);
             assertEquals(expectedKey, entry.getKey());
             assertEquals(expectedVal, entry.getValue());
         }
-        assertTrue("Scanner did not return all expected keys: " + expectedKeys, expectedKeys.isEmpty());
+        assertTrue(expectedKeys.isEmpty(), "Scanner did not return all expected keys: " + expectedKeys);
     }
     
     @Test
@@ -140,15 +140,15 @@ public class ScannerHelperTest {
         scanner.updateScanIteratorOption("visibilityFilter10", ConfigurableVisibilityFilter.AUTHORIZATIONS_OPT, "A,B,C");
         scanner.updateScanIteratorOption("visibilityFilter11", ConfigurableVisibilityFilter.AUTHORIZATIONS_OPT, "A,B,C");
         for (Entry<Key,Value> entry : scanner) {
-            assertFalse("Ran out of expected keys but got: " + entry.getKey(), expectedKeys.isEmpty());
+            assertFalse(expectedKeys.isEmpty(), "Ran out of expected keys but got: " + entry.getKey());
             Key expectedKey = expectedKeys.remove(0);
             assertEquals(expectedKey, entry.getKey());
             assertEquals(expectedVal, entry.getValue());
         }
-        assertTrue("Scanner did not return all expected keys: " + expectedKeys, expectedKeys.isEmpty());
+        assertTrue(expectedKeys.isEmpty(), "Scanner did not return all expected keys: " + expectedKeys);
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testVisibilityFilterSystemNameRemoveIntegrity() throws Exception {
         
         Authorizations a1 = new Authorizations("A", "B", "C");
@@ -157,11 +157,10 @@ public class ScannerHelperTest {
         
         Scanner scanner = ScannerHelper.createScanner(new WrappedConnector(mockConnector, mockConnector), TABLE_NAME, Arrays.asList(a1, a2, a3));
         // Removing the scan iterator should do nothing to the iterators added by ScannerHelper.createScanner
-        scanner.removeScanIterator("sys_visibilityFilter10");
-        fail("Removing the scan iterator should have thrown an exception.");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> scanner.removeScanIterator("sys_visibilityFilter10"));
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testVisibilityFilterSystemNameModifyIntegrity() throws Exception {
         
         Authorizations a1 = new Authorizations("A", "B", "C");
@@ -170,11 +169,11 @@ public class ScannerHelperTest {
         
         Scanner scanner = ScannerHelper.createScanner(new WrappedConnector(mockConnector, mockConnector), TABLE_NAME, Arrays.asList(a1, a2, a3));
         // Removing the scan iterator should do nothing to the iterators added by ScannerHelper.createScanner
-        scanner.updateScanIteratorOption("sys_visibilityFilter10", ConfigurableVisibilityFilter.AUTHORIZATIONS_OPT, "A,B,C");
-        fail("Updating the scan iterator should have thrown an exception.");
+        Assertions.assertThrows(IllegalArgumentException.class,
+                        () -> scanner.updateScanIteratorOption("sys_visibilityFilter10", ConfigurableVisibilityFilter.AUTHORIZATIONS_OPT, "A,B,C"));
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testVisibilityFilterSystemNameAddIntegrity() throws Exception {
         
         Authorizations a1 = new Authorizations("A", "B", "C");
@@ -184,7 +183,6 @@ public class ScannerHelperTest {
         Scanner scanner = ScannerHelper.createScanner(new WrappedConnector(mockConnector, mockConnector), TABLE_NAME, Arrays.asList(a1, a2, a3));
         // Removing the scan iterator should do nothing to the iterators added by ScannerHelper.createScanner
         IteratorSetting cfg = new IteratorSetting(10, "dwSystem_mySystemIterator", ConfigurableVisibilityFilter.class);
-        scanner.addScanIterator(cfg);
-        fail("Updating the scan iterator should have thrown an exception.");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> scanner.addScanIterator(cfg));
     }
 }
