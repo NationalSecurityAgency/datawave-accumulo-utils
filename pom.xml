@@ -23,18 +23,11 @@
         <url>https://github.com/NationalSecurityAgency/datawave-accumulo-utils</url>
     </scm>
     <properties>
-        <version.accumulo>1.9.3</version.accumulo>
         <version.authorization-api>1.14-SNAPSHOT</version.authorization-api>
-        <version.commons-collections>4.2</version.commons-collections>
-        <version.dropwizard>3.2.5</version.dropwizard>
-        <!-- Guava 15 is needed for Accumulo on the tservers -->
-        <version.guava>15.0</version.guava>
+        <version.commons-collections>4.4</version.commons-collections>
         <version.in-memory-accumulo>1.9.3-SNAPSHOT</version.in-memory-accumulo>
-        <version.slf4j>1.7.26</version.slf4j>
-        <!-- snappy and dropwizard required to allow miniaccumulo to work with upgraded zookeeper -->
-        <version.snappy>1.1.7</version.snappy>
-        <version.spring>5.3.5</version.spring>
-        <version.zookeeper>3.6.3</version.zookeeper>
+        <!-- snappy and dropwizard (which is provided by spring) required to allow miniaccumulo to work with upgraded zookeeper -->
+        <version.snappy>1.1.8</version.snappy>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -47,17 +40,6 @@
                 <groupId>gov.nsa.datawave.microservice</groupId>
                 <artifactId>authorization-api</artifactId>
                 <version>${version.authorization-api}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-core</artifactId>
-                <version>${version.dropwizard}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>slf4j-api</artifactId>
-                        <groupId>org.slf4j</groupId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.accumulo</groupId>
@@ -133,13 +115,6 @@
                 <version>${version.snappy}</version>
             </dependency>
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-framework-bom</artifactId>
-                <version>${version.spring}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
                 <groupId>gov.nsa.datawave.contrib</groupId>
                 <artifactId>datawave-in-memory-accumulo</artifactId>
                 <version>${version.in-memory-accumulo}</version>
@@ -154,12 +129,6 @@
                         <groupId>commons-lang</groupId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-simple</artifactId>
-                <version>${version.slf4j}</version>
-                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
