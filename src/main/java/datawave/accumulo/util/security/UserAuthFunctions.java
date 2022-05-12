@@ -51,7 +51,7 @@ public interface UserAuthFunctions {
      *            The set of requested Accumulo authorizations (comma-delimited)
      * @param user
      *            The DataWave user for whom authorizations are being requested
-     *
+     *            
      * @return {@link Authorizations} instance appropriate for the given inputs
      */
     Authorizations getRequestedAuthorizations(String requestedAuths, DatawaveUser user);
@@ -70,7 +70,7 @@ public interface UserAuthFunctions {
      * @param proxiedUserTest
      *            A predicate that, given a user from {@code proxyChain}, indicates whether or not that user is the primary user. The predicate should return
      *            {@code true} if the user is NOT the primary user.
-     *
+     *            
      * @return A set of {@link Authorizations}, one per user entity represented by the user chain including {@code primaryUserAuths}
      */
     LinkedHashSet<Authorizations> mergeAuthorizations(Authorizations primaryUserAuths, Collection<? extends DatawaveUser> proxyChain,
@@ -86,7 +86,7 @@ public interface UserAuthFunctions {
          * @return IFF every element in {@code requestedAuths} also exists in {@link DatawaveUser#getAuths()} then {@code requestedAuths} is translated to
          *         {@link Authorizations} and returned. If either of {@code requestedAuths} or {@link DatawaveUser#getAuths()} is empty/null, then
          *         {@link Authorizations#EMPTY} is returned. If any requested auths are missing in {@link DatawaveUser#getAuths()}, then an exception is thrown
-         *
+         *         
          * @throws IllegalArgumentException
          *             if {@code requestedAuths} contains elements that do not exist in {@link DatawaveUser#getAuths()}
          */

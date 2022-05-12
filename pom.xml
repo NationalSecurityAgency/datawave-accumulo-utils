@@ -5,7 +5,7 @@
         <groupId>gov.nsa.datawave.microservice</groupId>
         <artifactId>datawave-microservice-parent</artifactId>
         <version>1.9-SNAPSHOT</version>
-        <relativePath />
+        <relativePath>../../../microservices/microservice-parent/pom.xml</relativePath>
     </parent>
     <artifactId>accumulo-utils</artifactId>
     <version>1.5-SNAPSHOT</version>
@@ -140,7 +140,7 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>gov.nsa.datawave.contrib</groupId>
+                <groupId>gov.nsa.datawave</groupId>
                 <artifactId>datawave-in-memory-accumulo</artifactId>
                 <version>${version.in-memory-accumulo}</version>
                 <scope>test</scope>
@@ -206,7 +206,7 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>gov.nsa.datawave.contrib</groupId>
+            <groupId>gov.nsa.datawave</groupId>
             <artifactId>datawave-in-memory-accumulo</artifactId>
             <scope>test</scope>
         </dependency>
