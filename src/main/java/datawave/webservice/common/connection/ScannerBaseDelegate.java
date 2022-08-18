@@ -30,9 +30,20 @@ public class ScannerBaseDelegate implements ScannerBase {
     private static final String SYSTEM_ITERATOR_NAME_PREFIX = "sys_";
     
     protected final ScannerBase delegate;
+    protected ConsistencyLevel level = ConsistencyLevel.IMMEDIATE;
     
     public ScannerBaseDelegate(ScannerBase delegate) {
         this.delegate = delegate;
+    }
+    
+    @Override
+    public ConsistencyLevel getConsistencyLevel() {
+        return this.level;
+    }
+    
+    @Override
+    public void setConsistencyLevel(ConsistencyLevel level) {
+        this.level = level;
     }
     
     @Override
