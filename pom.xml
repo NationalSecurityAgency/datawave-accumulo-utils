@@ -29,6 +29,7 @@
         <version.commons-collections>4.4</version.commons-collections>
         <version.guava>28.1-jre</version.guava>
         <version.in-memory-accumulo>2.1.0-SNAPSHOT</version.in-memory-accumulo>
+        <version.log4j>2.17.2</version.log4j>
         <version.slf4j>1.7.29</version.slf4j>
         <version.spring>5.2.2.RELEASE</version.spring>
     </properties>
@@ -97,6 +98,13 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
                 <version>${version.commons-collections}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-bom</artifactId>
+                <version>${version.log4j}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
