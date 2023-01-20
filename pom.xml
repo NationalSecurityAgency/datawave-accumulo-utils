@@ -25,8 +25,8 @@
     <properties>
         <version.accumulo>1.10.2</version.accumulo>
         <version.authorization-api>1.14-SNAPSHOT</version.authorization-api>
-        <version.commons-collections>4.2</version.commons-collections>
-        <version.dropwizard>3.2.5</version.dropwizard>
+        <version.commons-collections>4.3</version.commons-collections>
+        <version.dropwizard>4.1.2</version.dropwizard>
         <!-- Guava 15 is needed for Accumulo on the tservers -->
         <version.guava>15.0</version.guava>
         <version.in-memory-accumulo>1.10.3-SNAPSHOT</version.in-memory-accumulo>
