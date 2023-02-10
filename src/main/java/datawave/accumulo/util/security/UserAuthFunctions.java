@@ -3,6 +3,7 @@ package datawave.accumulo.util.security;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
+import datawave.security.authorization.AuthorizationException;
 import datawave.security.authorization.DatawaveUser;
 import org.apache.accumulo.core.security.Authorizations;
 
@@ -35,13 +36,27 @@ public interface UserAuthFunctions {
     char REQUESTED_AUTHS_DELIMITER = ',';
     
     /**
+     * If {@code requestedAuths} contains elements that don't appear in {@link DatawaveUser#getAuths()}, implementors will throw an exception indicating that
+     * authorizations have been requested which the user has not been granted.
+     *
+     * @param requestedAuths
+     *            The set of requested Accumulo authorizations (comma-delimited)
+     * @param user
+     *            The DataWave user for whom authorizations are being requested
+     *
+     * @throws AuthorizationException
+     *             when the requested auths are not valid for the user
+     */
+    void validateRequestedAuthorizations(String requestedAuths, DatawaveUser user) throws AuthorizationException;
+    
+    /**
      * Typically, implementations will simply compute the intersection of the two sets, {@code requestedAuths} and {@link DatawaveUser#getAuths()}, and then
      * return the resulting set in the form of an {@link Authorizations} instance.
      * <p>
      * For example, computing the intersection of the sets can allow a DataWave user to request a "downgraded" subset of their granted auths for their pending
      * query while also preventing privilege escalation.
      * <p>
-     * If {@code requestedAuths} contains elements that don't appear in {@link DatawaveUser#getAuths()}, implementors may opt to throw a runtime exception
+     * If {@code requestedAuths} contains elements that don't appear in {@link DatawaveUser#getAuths()}, implementors should throw a runtime exception
      * indicating that authorizations have been requested which the user has not been granted.
      * <p>
      * Additionally, implementors should return a default {@link Authorizations} instance (i.e., {@code new Authorizations()}) rather than {@code null} to
@@ -55,6 +70,30 @@ public interface UserAuthFunctions {
      * @return {@link Authorizations} instance appropriate for the given inputs
      */
     Authorizations getRequestedAuthorizations(String requestedAuths, DatawaveUser user);
+    
+    /**
+     * Typically, implementations will simply compute the intersection of the two sets, {@code requestedAuths} and {@link DatawaveUser#getAuths()}, and then
+     * return the resulting set in the form of an {@link Authorizations} instance.
+     * <p>
+     * For example, computing the intersection of the sets can allow a DataWave user to request a "downgraded" subset of their granted auths for their pending
+     * query while also preventing privilege escalation.
+     * <p>
+     * If {@code throwOnMissingAuths} is true and the {@code requestedAuths} contains elements that don't appear in {@link DatawaveUser#getAuths()},
+     * implementors will throw a runtime exception indicating that authorizations have been requested which the user has not been granted.
+     * <p>
+     * Additionally, implementors should return a default {@link Authorizations} instance (i.e., {@code new Authorizations()}) rather than {@code null} to
+     * denote that the request is invalid based on the given inputs.
+     *
+     * @param requestedAuths
+     *            The set of requested Accumulo authorizations (comma-delimited)
+     * @param user
+     *            The DataWave user for whom authorizations are being requested
+     * @param throwOnMissingAuths
+     *            If true then an exception is thrown if the user is missing any of the requested auths
+     *
+     * @return {@link Authorizations} instance appropriate for the given inputs
+     */
+    Authorizations getRequestedAuthorizations(String requestedAuths, DatawaveUser user, boolean throwOnMissingAuths);
     
     /**
      * This method provides a merged view of the auths from the specified proxy chain and from those in {@code primaryUserAuths}, e.g., as precomputed by
@@ -83,6 +122,20 @@ public interface UserAuthFunctions {
         
         /**
          *
+         * @throws AuthorizationException
+         *             if {@code requestedAuths} contains elements that do not exist in {@link DatawaveUser#getAuths()}
+         */
+        @Override
+        public void validateRequestedAuthorizations(String requestedAuths, DatawaveUser user) throws AuthorizationException {
+            try {
+                getRequestedAuthorizations(requestedAuths, user, true);
+            } catch (IllegalArgumentException e) {
+                throw new AuthorizationException(e);
+            }
+        }
+        
+        /**
+         *
          * @return IFF every element in {@code requestedAuths} also exists in {@link DatawaveUser#getAuths()} then {@code requestedAuths} is translated to
          *         {@link Authorizations} and returned. If either of {@code requestedAuths} or {@link DatawaveUser#getAuths()} is empty/null, then
          *         {@link Authorizations#EMPTY} is returned. If any requested auths are missing in {@link DatawaveUser#getAuths()}, then an exception is thrown
@@ -92,10 +145,24 @@ public interface UserAuthFunctions {
          */
         @Override
         public Authorizations getRequestedAuthorizations(String requestedAuths, DatawaveUser user) {
+            return getRequestedAuthorizations(requestedAuths, user, true);
+        }
+        
+        /**
+         *
+         * @return IFF every element in {@code requestedAuths} also exists in {@link DatawaveUser#getAuths()} then {@code requestedAuths} is translated to
+         *         {@link Authorizations} and returned. If either of {@code requestedAuths} or {@link DatawaveUser#getAuths()} is empty/null, then
+         *         {@link Authorizations#EMPTY} is returned. If any requested auths are missing in {@link DatawaveUser#getAuths()}, then an exception is thrown
+         *
+         * @throws IllegalArgumentException
+         *             if {@code requestedAuths} contains elements that do not exist in {@link DatawaveUser#getAuths()}
+         */
+        @Override
+        public Authorizations getRequestedAuthorizations(String requestedAuths, DatawaveUser user, boolean throwOnMissingAuths) {
             if (null == user) {
                 return Authorizations.EMPTY;
             }
-            return UserAuthFunctions.getRequestedAuthorizations(requestedAuths, user::getAuths, true);
+            return UserAuthFunctions.getRequestedAuthorizations(requestedAuths, user::getAuths, throwOnMissingAuths);
         }
         
         /**
