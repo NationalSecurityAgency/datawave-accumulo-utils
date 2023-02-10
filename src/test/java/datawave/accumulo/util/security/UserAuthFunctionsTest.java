@@ -2,6 +2,7 @@ package datawave.accumulo.util.security;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import datawave.security.authorization.AuthorizationException;
 import datawave.security.authorization.DatawaveUser;
 import datawave.security.authorization.SubjectIssuerDNPair;
 import org.apache.accumulo.core.security.Authorizations;
@@ -53,10 +54,45 @@ public class UserAuthFunctionsTest {
     }
     
     @Test
+    public void testDowngradeAuthorizations2() {
+        HashSet<Authorizations> expected = Sets.newHashSet(new Authorizations("A", "C"), new Authorizations("A", "B", "E"), new Authorizations("A", "F", "G"));
+        assertEquals(expected, UAF.mergeAuthorizations(UAF.getRequestedAuthorizations(requestedAuths, user, true), proxyChain, u -> u != user));
+    }
+    
+    @Test
     public void testUserRequestsAuthTheyDontHave() {
         requestedAuths = "A,C,D,X,Y,Z";
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             UAF.getRequestedAuthorizations(requestedAuths, user);
+        });
+    }
+    
+    @Test
+    public void testUserRequestsAuthTheyDontHave2() {
+        requestedAuths = "A,C,D,X,Y,Z";
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            UAF.getRequestedAuthorizations(requestedAuths, user, true);
+        });
+    }
+    
+    @Test
+    public void testUserRequestsAuthTheyDontHaveNoThrow() {
+        requestedAuths = "A,C,D,X,Y,Z";
+        Authorizations expected = new Authorizations("A", "C", "D");
+        assertEquals(expected, UAF.getRequestedAuthorizations(requestedAuths, user, false));
+    }
+    
+    @Test
+    public void testValidateUserRequestsAuth() throws AuthorizationException {
+        requestedAuths = "A,C";
+        UAF.validateRequestedAuthorizations(requestedAuths, user);
+    }
+    
+    @Test
+    public void testValidateUserRequestsAuthTheyDontHave() throws AuthorizationException {
+        requestedAuths = "A,C,D,X,Y,Z";
+        Assertions.assertThrows(AuthorizationException.class, () -> {
+            UAF.validateRequestedAuthorizations(requestedAuths, user);
         });
     }
     
