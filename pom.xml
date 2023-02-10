@@ -8,7 +8,7 @@
         <relativePath />
     </parent>
     <artifactId>accumulo-utils</artifactId>
-    <version>1.5-SNAPSHOT</version>
+    <version>1.5</version>
     <url>https://code.nsa.gov/datawave-accumulo-utils</url>
     <licenses>
         <license>
