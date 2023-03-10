@@ -7,10 +7,10 @@ import java.util.concurrent.TimeUnit;
 import datawave.security.iterator.ConfigurableVisibilityFilter;
 
 import datawave.webservice.common.connection.ScannerBaseDelegate;
+import org.apache.accumulo.core.client.AccumuloClient;
 import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.BatchScanner;
 import org.apache.accumulo.core.client.BatchWriterConfig;
-import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.ScannerBase;
@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 public class ScannerHelper {
     private static final Logger logger = LoggerFactory.getLogger(ScannerHelper.class);
     
-    public static Scanner createScanner(Connector connector, String tableName, Collection<Authorizations> authorizations) throws TableNotFoundException {
+    public static Scanner createScanner(AccumuloClient connector, String tableName, Collection<Authorizations> authorizations) throws TableNotFoundException {
         if (authorizations == null || authorizations.isEmpty())
             throw new IllegalArgumentException("Authorizations must not be empty.");
         
@@ -32,7 +32,7 @@ public class ScannerHelper {
         return scanner;
     }
     
-    public static BatchScanner createBatchScanner(Connector connector, String tableName, Collection<Authorizations> authorizations, int numQueryThreads)
+    public static BatchScanner createBatchScanner(AccumuloClient connector, String tableName, Collection<Authorizations> authorizations, int numQueryThreads)
                     throws TableNotFoundException {
         if (authorizations == null || authorizations.isEmpty())
             throw new IllegalArgumentException("Authorizations must not be empty.");
@@ -43,7 +43,7 @@ public class ScannerHelper {
         return batchScanner;
     }
     
-    public static BatchDeleter createBatchDeleter(Connector connector, String tableName, Collection<Authorizations> authorizations, int numQueryThreads,
+    public static BatchDeleter createBatchDeleter(AccumuloClient connector, String tableName, Collection<Authorizations> authorizations, int numQueryThreads,
                     long maxMemory, long maxLatency, int maxWriteThreads) throws TableNotFoundException {
         if (authorizations == null || authorizations.isEmpty())
             throw new IllegalArgumentException("Authorizations must not be empty.");

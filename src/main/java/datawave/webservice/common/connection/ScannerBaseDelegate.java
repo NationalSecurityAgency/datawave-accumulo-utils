@@ -8,11 +8,11 @@ import java.util.concurrent.TimeUnit;
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.IteratorSetting.Column;
 import org.apache.accumulo.core.client.ScannerBase;
-import org.apache.accumulo.core.client.impl.ScannerOptions;
+import org.apache.accumulo.core.clientImpl.ScannerOptions;
 import org.apache.accumulo.core.client.sample.SamplerConfiguration;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.data.thrift.IterInfo;
+import org.apache.accumulo.core.dataImpl.thrift.IterInfo;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.io.Text;
 import org.slf4j.Logger;
@@ -30,9 +30,20 @@ public class ScannerBaseDelegate implements ScannerBase {
     private static final String SYSTEM_ITERATOR_NAME_PREFIX = "sys_";
     
     protected final ScannerBase delegate;
+    protected ConsistencyLevel level = ConsistencyLevel.IMMEDIATE;
     
     public ScannerBaseDelegate(ScannerBase delegate) {
         this.delegate = delegate;
+    }
+    
+    @Override
+    public ConsistencyLevel getConsistencyLevel() {
+        return this.level;
+    }
+    
+    @Override
+    public void setConsistencyLevel(ConsistencyLevel level) {
+        this.level = level;
     }
     
     @Override

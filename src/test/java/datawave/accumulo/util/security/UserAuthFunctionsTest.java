@@ -6,7 +6,6 @@ import datawave.security.authorization.AuthorizationException;
 import datawave.security.authorization.DatawaveUser;
 import datawave.security.authorization.SubjectIssuerDNPair;
 import org.apache.accumulo.core.security.Authorizations;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserAuthFunctionsTest {
     
@@ -62,17 +62,13 @@ public class UserAuthFunctionsTest {
     @Test
     public void testUserRequestsAuthTheyDontHave() {
         requestedAuths = "A,C,D,X,Y,Z";
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            UAF.getRequestedAuthorizations(requestedAuths, user);
-        });
+        assertThrows(IllegalArgumentException.class, () -> UAF.getRequestedAuthorizations(requestedAuths, user));
     }
     
     @Test
     public void testUserRequestsAuthTheyDontHave2() {
         requestedAuths = "A,C,D,X,Y,Z";
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            UAF.getRequestedAuthorizations(requestedAuths, user, true);
-        });
+        assertThrows(IllegalArgumentException.class, () -> UAF.getRequestedAuthorizations(requestedAuths, user, true));
     }
     
     @Test
@@ -89,11 +85,9 @@ public class UserAuthFunctionsTest {
     }
     
     @Test
-    public void testValidateUserRequestsAuthTheyDontHave() throws AuthorizationException {
+    public void testValidateUserRequestsAuthTheyDontHave() {
         requestedAuths = "A,C,D,X,Y,Z";
-        Assertions.assertThrows(AuthorizationException.class, () -> {
-            UAF.validateRequestedAuthorizations(requestedAuths, user);
-        });
+        assertThrows(AuthorizationException.class, () -> UAF.validateRequestedAuthorizations(requestedAuths, user));
     }
     
     @Test

@@ -2,21 +2,20 @@ package datawave.util.time;
 
 import java.util.concurrent.TimeUnit;
 
-import org.apache.accumulo.core.trace.Span;
-import org.apache.accumulo.core.trace.Trace;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility for measuring the time taken to perform some operation.
  */
 public class TraceStopwatch {
+    static private Logger log = LoggerFactory.getLogger(TraceStopwatch.class);
     
     protected final String description;
     protected final Stopwatch sw;
-    protected Span span;
     
     public TraceStopwatch(String description) {
         Preconditions.checkNotNull(description);
@@ -34,19 +33,22 @@ public class TraceStopwatch {
     }
     
     public void start() {
-        span = Trace.start(description);
+        if (log.isTraceEnabled()) {
+            log.trace("{} - Stopwatch starting. TID: {}", description, Thread.currentThread().getId());
+        }
         this.sw.start();
     }
     
     public void data(String name, String value) {
-        span.data(name, value);
+        if (log.isTraceEnabled()) {
+            log.trace("{} - K/V: '{}'/'{}' TID: {}", description, name, value, Thread.currentThread().getId());
+        }
     }
     
     public void stop() {
         this.sw.stop();
-        
-        if (null != span) {
-            span.stop();
+        if (log.isTraceEnabled()) {
+            log.trace("{} - Stopwatch stopped. TID: {}", description, Thread.currentThread().getId());
         }
     }
     
@@ -56,7 +58,7 @@ public class TraceStopwatch {
     
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(span.hashCode()).append(description).append(sw.hashCode()).toHashCode();
+        return new HashCodeBuilder().append(description).append(sw.hashCode()).toHashCode();
     }
     
     @Override
