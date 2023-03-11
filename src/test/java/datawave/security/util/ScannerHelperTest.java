@@ -1,5 +1,6 @@
 package datawave.security.util;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -157,7 +158,7 @@ public class ScannerHelperTest {
         
         Scanner scanner = ScannerHelper.createScanner(new WrappedConnector(mockConnector, mockConnector), TABLE_NAME, Arrays.asList(a1, a2, a3));
         // Removing the scan iterator should do nothing to the iterators added by ScannerHelper.createScanner
-        Assertions.assertThrows(IllegalArgumentException.class, () -> scanner.removeScanIterator("sys_visibilityFilter10"));
+        assertThrows(IllegalArgumentException.class, () -> scanner.removeScanIterator("sys_visibilityFilter10"));
     }
     
     @Test
@@ -169,7 +170,7 @@ public class ScannerHelperTest {
         
         Scanner scanner = ScannerHelper.createScanner(new WrappedConnector(mockConnector, mockConnector), TABLE_NAME, Arrays.asList(a1, a2, a3));
         // Removing the scan iterator should do nothing to the iterators added by ScannerHelper.createScanner
-        Assertions.assertThrows(IllegalArgumentException.class,
+        assertThrows(IllegalArgumentException.class,
                         () -> scanner.updateScanIteratorOption("sys_visibilityFilter10", ConfigurableVisibilityFilter.AUTHORIZATIONS_OPT, "A,B,C"));
     }
     
@@ -183,6 +184,6 @@ public class ScannerHelperTest {
         Scanner scanner = ScannerHelper.createScanner(new WrappedConnector(mockConnector, mockConnector), TABLE_NAME, Arrays.asList(a1, a2, a3));
         // Removing the scan iterator should do nothing to the iterators added by ScannerHelper.createScanner
         IteratorSetting cfg = new IteratorSetting(10, "dwSystem_mySystemIterator", ConfigurableVisibilityFilter.class);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> scanner.addScanIterator(cfg));
+        assertThrows(IllegalArgumentException.class, () -> scanner.addScanIterator(cfg));
     }
 }

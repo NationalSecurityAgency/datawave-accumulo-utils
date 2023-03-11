@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserAuthFunctionsTest {
     
@@ -62,7 +63,7 @@ public class UserAuthFunctionsTest {
     @Test
     public void testUserRequestsAuthTheyDontHave() {
         requestedAuths = "A,C,D,X,Y,Z";
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             UAF.getRequestedAuthorizations(requestedAuths, user);
         });
     }
@@ -70,7 +71,7 @@ public class UserAuthFunctionsTest {
     @Test
     public void testUserRequestsAuthTheyDontHave2() {
         requestedAuths = "A,C,D,X,Y,Z";
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             UAF.getRequestedAuthorizations(requestedAuths, user, true);
         });
     }
@@ -91,7 +92,7 @@ public class UserAuthFunctionsTest {
     @Test
     public void testValidateUserRequestsAuthTheyDontHave() throws AuthorizationException {
         requestedAuths = "A,C,D,X,Y,Z";
-        Assertions.assertThrows(AuthorizationException.class, () -> {
+        assertThrows(AuthorizationException.class, () -> {
             UAF.validateRequestedAuthorizations(requestedAuths, user);
         });
     }
