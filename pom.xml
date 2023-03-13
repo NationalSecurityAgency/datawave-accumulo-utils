@@ -31,7 +31,7 @@
         <version.in-memory-accumulo>2.1.0</version.in-memory-accumulo>
         <version.log4j>2.17.2</version.log4j>
         <version.slf4j>1.7.29</version.slf4j>
-        <version.spring>5.2.2.RELEASE</version.spring>
+        <version.spring>5.2.9.RELEASE</version.spring>
     </properties>
     <dependencyManagement>
         <dependencies>
