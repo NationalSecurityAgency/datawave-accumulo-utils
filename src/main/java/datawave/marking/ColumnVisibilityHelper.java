@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import datawave.marking.MarkingFunctions.Exception;
-
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.accumulo.core.security.ColumnVisibility.Node;
@@ -15,6 +13,8 @@ import org.apache.accumulo.core.security.ColumnVisibility.NodeType;
 import org.apache.accumulo.core.security.VisibilityEvaluator;
 import org.apache.accumulo.core.security.VisibilityParseException;
 import org.apache.log4j.Logger;
+
+import datawave.marking.MarkingFunctions.Exception;
 
 public class ColumnVisibilityHelper {
     

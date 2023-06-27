@@ -1,20 +1,22 @@
 package datawave.accumulo.util.security;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import datawave.security.authorization.AuthorizationException;
-import datawave.security.authorization.DatawaveUser;
-import datawave.security.authorization.SubjectIssuerDNPair;
-import org.apache.accumulo.core.security.Authorizations;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.apache.accumulo.core.security.Authorizations;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
+import datawave.security.authorization.AuthorizationException;
+import datawave.security.authorization.DatawaveUser;
+import datawave.security.authorization.SubjectIssuerDNPair;
 
 public class UserAuthFunctionsTest {
     

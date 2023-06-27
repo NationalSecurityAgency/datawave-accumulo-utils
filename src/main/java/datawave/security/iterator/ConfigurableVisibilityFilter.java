@@ -1,5 +1,8 @@
 package datawave.security.iterator;
 
+import java.io.IOException;
+import java.util.Map;
+
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
@@ -9,9 +12,6 @@ import org.apache.accumulo.core.iterators.WrappingIterator;
 import org.apache.accumulo.core.iteratorsImpl.system.VisibilityFilter;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.log4j.Logger;
-
-import java.io.IOException;
-import java.util.Map;
 
 public class ConfigurableVisibilityFilter extends WrappingIterator implements OptionDescriber {
     public static final String AUTHORIZATIONS_OPT = "authorizations";

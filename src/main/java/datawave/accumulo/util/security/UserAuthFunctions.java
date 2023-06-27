@@ -1,11 +1,6 @@
 package datawave.accumulo.util.security;
 
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
-import datawave.security.authorization.AuthorizationException;
-import datawave.security.authorization.DatawaveUser;
-import org.apache.accumulo.core.security.Authorizations;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,7 +11,14 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import org.apache.accumulo.core.security.Authorizations;
+
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
+import com.google.common.collect.Iterables;
+
+import datawave.security.authorization.AuthorizationException;
+import datawave.security.authorization.DatawaveUser;
 
 /**
  * Function definitions for common DataWave/Accumulo security concerns, such as translation of {@link DatawaveUser} auth tokens to Accumulo

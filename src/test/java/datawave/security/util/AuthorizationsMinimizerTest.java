@@ -1,15 +1,16 @@
 package datawave.security.util;
 
-import com.google.common.collect.Lists;
-import org.apache.accumulo.core.security.Authorizations;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.apache.accumulo.core.security.Authorizations;
+import org.junit.jupiter.api.Test;
+
+import com.google.common.collect.Lists;
 
 public class AuthorizationsMinimizerTest {
     

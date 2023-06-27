@@ -4,9 +4,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
-import datawave.security.iterator.ConfigurableVisibilityFilter;
-
-import datawave.webservice.common.connection.ScannerBaseDelegate;
 import org.apache.accumulo.core.client.AccumuloClient;
 import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.BatchScanner;
@@ -18,6 +15,9 @@ import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.security.Authorizations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import datawave.security.iterator.ConfigurableVisibilityFilter;
+import datawave.webservice.common.connection.ScannerBaseDelegate;
 
 public class ScannerHelper {
     private static final Logger logger = LoggerFactory.getLogger(ScannerHelper.class);

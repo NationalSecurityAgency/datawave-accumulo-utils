@@ -1,14 +1,15 @@
 package datawave.marking;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
-import org.apache.accumulo.core.security.ColumnVisibility;
-import org.junit.jupiter.api.Test;
+import static datawave.marking.MarkingFunctions.Default.COLUMN_VISIBILITY;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Map;
 
-import static datawave.marking.MarkingFunctions.Default.COLUMN_VISIBILITY;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.apache.accumulo.core.security.ColumnVisibility;
+import org.junit.jupiter.api.Test;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
 
 public class MarkingFunctionsDefaultCombineTest {
     

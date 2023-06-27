@@ -1,13 +1,13 @@
 package datawave.security.util;
 
-import org.apache.accumulo.core.security.Authorizations;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.apache.accumulo.core.security.Authorizations;
 
 /**
  * @see AuthorizationsMinimizer#minimize(Collection)

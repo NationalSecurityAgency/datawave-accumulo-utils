@@ -1,5 +1,7 @@
 package datawave.marking;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.util.Arrays;
 
 import org.apache.accumulo.core.security.ColumnVisibility;
@@ -7,8 +9,6 @@ import org.apache.accumulo.core.security.ColumnVisibility.Node;
 import org.apache.accumulo.core.security.ColumnVisibility.NodeComparator;
 import org.apache.accumulo.core.security.ColumnVisibility.NodeType;
 import org.apache.hadoop.io.Text;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class VisibilityFlattener {
     public static ColumnVisibility flatten(Node root, byte[] expression, boolean sort) {
