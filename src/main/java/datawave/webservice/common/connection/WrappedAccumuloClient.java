@@ -43,6 +43,18 @@ public class WrappedAccumuloClient implements AccumuloClient {
         this.clientConfig = clientConfig;
     }
     
+    /**
+     * This will update the client configuration with overrides
+     * 
+     * @param clientConfig
+     */
+    public void updateClientConfig(AccumuloClientConfiguration clientConfig) {
+        AccumuloClientConfiguration merged = new AccumuloClientConfiguration();
+        merged.applyOverrides(this.clientConfig);
+        merged.applyOverrides(clientConfig);
+        this.clientConfig = merged;
+    }
+    
     @Override
     public BatchScanner createBatchScanner(String tableName, Authorizations authorizations, int numQueryThreads) throws TableNotFoundException {
         BatchScannerDelegate delegate;

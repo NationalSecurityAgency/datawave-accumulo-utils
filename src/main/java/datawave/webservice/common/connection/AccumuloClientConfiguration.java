@@ -40,6 +40,15 @@ public class AccumuloClientConfiguration {
         }
     }
     
+    public void applyOverrides(AccumuloClientConfiguration config) {
+        for (String table : config.hintsByTable.keySet()) {
+            putHints(table, config.hintsByTable.get(table));
+        }
+        for (String table : config.consistencyByTable.keySet()) {
+            setConsistency(table, config.consistencyByTable.get(table));
+        }
+    }
+    
     public void setConsistency(String table, ScannerBase.ConsistencyLevel level) {
         consistencyByTable.put(table, level);
     }
