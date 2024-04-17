@@ -32,10 +32,15 @@ public class WrappedAccumuloClient implements AccumuloClient {
     private AccumuloClient real = null;
     private String scannerClassLoaderContext = null;
     private long scanBatchTimeoutSeconds = Long.MAX_VALUE;
+    private AccumuloClientConfiguration clientConfig = new AccumuloClientConfiguration();
     
     public WrappedAccumuloClient(AccumuloClient real, AccumuloClient mock) {
         this.real = real;
         this.mock = mock;
+    }
+    
+    public void setClientConfig(AccumuloClientConfiguration clientConfig) {
+        this.clientConfig = clientConfig;
     }
     
     @Override
@@ -52,6 +57,7 @@ public class WrappedAccumuloClient implements AccumuloClient {
                 log.trace("Creating real batch scanner for table: " + tableName);
             }
             BatchScanner batchScanner = real.createBatchScanner(tableName, authorizations, numQueryThreads);
+            clientConfig.apply(batchScanner, tableName);
             delegate = new BatchScannerDelegate(batchScanner);
             if (scannerClassLoaderContext != null && !"".equals(scannerClassLoaderContext.trim())) {
                 log.trace("Setting " + scannerClassLoaderContext + " classpath context on a new batch scanner.");
@@ -76,6 +82,7 @@ public class WrappedAccumuloClient implements AccumuloClient {
                 log.trace("Creating real batch scanner for table: " + tableName);
             }
             BatchScanner batchScanner = real.createBatchScanner(tableName, authorizations);
+            clientConfig.apply(batchScanner, tableName);
             delegate = new BatchScannerDelegate(batchScanner);
             if (scannerClassLoaderContext != null && !"".equals(scannerClassLoaderContext.trim())) {
                 log.trace("Setting " + scannerClassLoaderContext + " classpath context on a new batch scanner.");
@@ -100,6 +107,7 @@ public class WrappedAccumuloClient implements AccumuloClient {
                 log.trace("Creating real batch scanner for table: " + tableName);
             }
             BatchScanner batchScanner = real.createBatchScanner(tableName);
+            clientConfig.apply(batchScanner, tableName);
             delegate = new BatchScannerDelegate(batchScanner);
             if (scannerClassLoaderContext != null && !"".equals(scannerClassLoaderContext.trim())) {
                 log.trace("Setting " + scannerClassLoaderContext + " classpath context on a new batch scanner.");
@@ -171,6 +179,7 @@ public class WrappedAccumuloClient implements AccumuloClient {
                 log.trace("Creating real scanner for table: " + tableName);
             }
             Scanner scanner = real.createScanner(tableName, authorizations);
+            clientConfig.apply(scanner, tableName);
             delegate = new ScannerDelegate(scanner);
             if (scannerClassLoaderContext != null && !"".equals(scannerClassLoaderContext.trim())) {
                 log.trace("Setting " + scannerClassLoaderContext + " classpath context on a new scanner.");
