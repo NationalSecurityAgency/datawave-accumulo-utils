@@ -30,7 +30,6 @@ public class ScannerBaseDelegate implements ScannerBase {
     private static final String SYSTEM_ITERATOR_NAME_PREFIX = "sys_";
     
     protected final ScannerBase delegate;
-    protected ConsistencyLevel level = ConsistencyLevel.IMMEDIATE;
     
     public ScannerBaseDelegate(ScannerBase delegate) {
         this.delegate = delegate;
@@ -38,12 +37,12 @@ public class ScannerBaseDelegate implements ScannerBase {
     
     @Override
     public ConsistencyLevel getConsistencyLevel() {
-        return this.level;
+        return this.delegate.getConsistencyLevel();
     }
     
     @Override
     public void setConsistencyLevel(ConsistencyLevel level) {
-        this.level = level;
+        delegate.setConsistencyLevel(level);
     }
     
     @Override
@@ -253,6 +252,11 @@ public class ScannerBaseDelegate implements ScannerBase {
             return settings;
         }
         
+    }
+    
+    @Override
+    public void setExecutionHints(Map<String,String> hints) {
+        delegate.setExecutionHints(hints);
     }
     
 }
