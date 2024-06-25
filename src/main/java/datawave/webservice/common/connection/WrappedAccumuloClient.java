@@ -57,8 +57,13 @@ public class WrappedAccumuloClient implements AccumuloClient {
     
     @Override
     public BatchScanner createBatchScanner(String tableName, Authorizations authorizations, int numQueryThreads) throws TableNotFoundException {
+        return createBatchScanner(tableName, authorizations, numQueryThreads, false);
+    }
+    
+    public BatchScanner createBatchScanner(String tableName, Authorizations authorizations, int numQueryThreads, boolean skipCache)
+                    throws TableNotFoundException {
         BatchScannerDelegate delegate;
-        if (mock.tableOperations().list().contains(tableName)) {
+        if (!skipCache && mock.tableOperations().list().contains(tableName)) {
             if (log.isTraceEnabled()) {
                 log.trace("Creating mock batch scanner for table: " + tableName);
             }
@@ -82,8 +87,12 @@ public class WrappedAccumuloClient implements AccumuloClient {
     
     @Override
     public BatchScanner createBatchScanner(String tableName, Authorizations authorizations) throws TableNotFoundException {
+        return createBatchScanner(tableName, authorizations, false);
+    }
+    
+    public BatchScanner createBatchScanner(String tableName, Authorizations authorizations, boolean skipCache) throws TableNotFoundException {
         BatchScannerDelegate delegate;
-        if (mock.tableOperations().list().contains(tableName)) {
+        if (!skipCache && mock.tableOperations().list().contains(tableName)) {
             if (log.isTraceEnabled()) {
                 log.trace("Creating mock batch scanner for table: " + tableName);
             }
@@ -107,8 +116,12 @@ public class WrappedAccumuloClient implements AccumuloClient {
     
     @Override
     public BatchScanner createBatchScanner(String tableName) throws TableNotFoundException, AccumuloSecurityException, AccumuloException {
+        return createBatchScanner(tableName, false);
+    }
+    
+    public BatchScanner createBatchScanner(String tableName, boolean skipCache) throws TableNotFoundException, AccumuloSecurityException, AccumuloException {
         BatchScannerDelegate delegate;
-        if (mock.tableOperations().list().contains(tableName)) {
+        if (!skipCache && mock.tableOperations().list().contains(tableName)) {
             if (log.isTraceEnabled()) {
                 log.trace("Creating mock batch scanner for table: " + tableName);
             }
@@ -179,8 +192,12 @@ public class WrappedAccumuloClient implements AccumuloClient {
     
     @Override
     public Scanner createScanner(String tableName, Authorizations authorizations) throws TableNotFoundException {
+        return createScanner(tableName, authorizations, false);
+    }
+    
+    public Scanner createScanner(String tableName, Authorizations authorizations, boolean skipCache) throws TableNotFoundException {
         ScannerDelegate delegate;
-        if (mock.tableOperations().list().contains(tableName)) {
+        if (!skipCache && mock.tableOperations().list().contains(tableName)) {
             if (log.isTraceEnabled()) {
                 log.trace("Creating mock scanner for table: " + tableName);
             }
@@ -203,8 +220,12 @@ public class WrappedAccumuloClient implements AccumuloClient {
     
     @Override
     public Scanner createScanner(String tableName) throws TableNotFoundException, AccumuloSecurityException, AccumuloException {
+        return createScanner(tableName, false);
+    }
+    
+    public Scanner createScanner(String tableName, boolean skipCache) throws TableNotFoundException, AccumuloSecurityException, AccumuloException {
         Scanner delegate;
-        if (mock.tableOperations().list().contains(tableName)) {
+        if (!skipCache && mock.tableOperations().list().contains(tableName)) {
             if (log.isTraceEnabled()) {
                 log.trace("Creating mock batch scanner for table: " + tableName);
             }
@@ -282,5 +303,4 @@ public class WrappedAccumuloClient implements AccumuloClient {
     public void setScanBatchTimeoutSeconds(long scanBatchTimeoutSeconds) {
         this.scanBatchTimeoutSeconds = scanBatchTimeoutSeconds;
     }
-    
 }
