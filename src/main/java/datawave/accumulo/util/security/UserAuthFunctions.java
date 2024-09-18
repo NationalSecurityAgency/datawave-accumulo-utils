@@ -278,7 +278,7 @@ public interface UserAuthFunctions {
                 return new UserAuthFunctions.Default();
             } else {
                 try {
-                    return (UserAuthFunctions) Class.forName(classOverride).newInstance();
+                    return (UserAuthFunctions) Class.forName(classOverride).getDeclaredConstructor().newInstance();
                 } catch (Throwable t) {
                     throw new RuntimeException(String.format("Failed to create instance of '%s'", classOverride), t);
                 }
