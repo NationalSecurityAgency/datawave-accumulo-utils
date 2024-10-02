@@ -12,14 +12,15 @@ import org.apache.accumulo.core.security.ColumnVisibility.Node;
 import org.apache.accumulo.core.security.ColumnVisibility.NodeType;
 import org.apache.accumulo.core.security.VisibilityEvaluator;
 import org.apache.accumulo.core.security.VisibilityParseException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import datawave.marking.MarkingFunctions.Exception;
 
 public class ColumnVisibilityHelper {
     
     protected static final Charset charset = Charset.forName("UTF-8");
-    private static Logger log = Logger.getLogger(ColumnVisibilityHelper.class);
+    private static Logger log = LoggerFactory.getLogger(ColumnVisibilityHelper.class);
     
     public static ColumnVisibility simplifyColumnVisibilityForAuthorizations(ColumnVisibility columnVisibility, Collection<Authorizations> authorizations)
                     throws MarkingFunctions.Exception {
