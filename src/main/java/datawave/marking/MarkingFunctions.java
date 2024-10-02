@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.accumulo.access.AccessExpression;
+import org.apache.accumulo.core.data.ByteSequence;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.commons.beanutils.BeanUtils;
@@ -31,24 +33,27 @@ import com.google.common.collect.Maps;
 
 public interface MarkingFunctions {
     
-    ColumnVisibility combine(Collection<ColumnVisibility> columnVisibilities) throws MarkingFunctions.Exception;
+    ColumnVisibility combine(Collection<ColumnVisibility> columnVisibilities) throws Exception;
     
     @SuppressWarnings("unchecked")
-    Map<String,String> combine(Map<String,String>... markings) throws MarkingFunctions.Exception;
+    Map<String,String> combine(Map<String,String>... markings) throws Exception;
     
-    ColumnVisibility translateToColumnVisibility(Map<String,String> markings) throws MarkingFunctions.Exception;
+    // Used
+    ColumnVisibility translateToColumnVisibility(Map<String,String> markings) throws Exception;
     
-    Map<String,String> translateFromColumnVisibility(ColumnVisibility columnVisibility) throws MarkingFunctions.Exception;
+    // Used
+    Map<String,String> translateFromColumnVisibility(ColumnVisibility columnVisibility) throws Exception;
     
-    Map<String,String> translateFromColumnVisibilityForAuths(ColumnVisibility columnVisibility, Collection<Authorizations> authorizations)
-                    throws MarkingFunctions.Exception;
+    // Used
+    Map<String,String> translateFromColumnVisibilityForAuths(ColumnVisibility columnVisibility, Collection<Authorizations> authorizations) throws Exception;
     
-    Map<String,String> translateFromColumnVisibilityForAuths(ColumnVisibility columnVisibility, Authorizations authorizations)
-                    throws MarkingFunctions.Exception;
+    // Used
+    Map<String,String> translateFromColumnVisibilityForAuths(ColumnVisibility columnVisibility, Authorizations authorizations) throws Exception;
     
+    // Used
     byte[] flatten(ColumnVisibility vis);
     
-    @SuppressWarnings("serial")
+    // Used
     class Exception extends java.lang.Exception {
         
         public Exception() {
@@ -77,11 +82,8 @@ public interface MarkingFunctions {
         
         @Override
         public ColumnVisibility combine(Collection<ColumnVisibility> expressions) {
-            
-            // filter out any empty expressions, then flatten each one (to de-dupe) and concatenate with '&'
-            // flatten the final combined ColumnVisibility and use that to make the ColumnVisibility to return
-            return new ColumnVisibility(new ColumnVisibility(expressions.stream().map(ColumnVisibility::flatten).filter(b -> b.length > 0)
-                            .map(b -> "(" + new String(b, UTF_8) + ")").collect(Collectors.joining("&")).getBytes(UTF_8)).flatten());
+            return new ColumnVisibility(AccessExpression.of(expressions.stream().map(ColumnVisibility::getExpression).filter(b -> b.length > 0)
+                            .map(b -> "(" + new String(b, UTF_8) + ")").collect(Collectors.joining("&")).getBytes(UTF_8), true).getExpression());
         }
         
         @Override
@@ -95,8 +97,7 @@ public interface MarkingFunctions {
         
         @Override
         public ColumnVisibility translateToColumnVisibility(Map<String,String> markings) {
-            ColumnVisibility cv = new ColumnVisibility(markings.get(COLUMN_VISIBILITY));
-            return new ColumnVisibility(cv.flatten());
+            return new ColumnVisibility(AccessExpression.of(markings.get(COLUMN_VISIBILITY), true));
         }
         
         @Override
@@ -118,11 +119,12 @@ public interface MarkingFunctions {
         
         @Override
         public byte[] flatten(ColumnVisibility vis) {
-            return FlattenedVisibilityCache.flatten(vis);
+            return FlattenedVisibilityCache.flatten(AccessExpression.of(vis.getExpression()));
         }
         
     }
     
+    // ? Used ?
     class Util {
         
         public static Object populate(Object obj, Map<String,String> source) {
@@ -135,6 +137,7 @@ public interface MarkingFunctions {
         }
     }
     
+    // ? Encoding ?
     class Encoding {
         static private Logger log = LoggerFactory.getLogger(Encoding.class);
         
