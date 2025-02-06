@@ -26,7 +26,7 @@ public class FlattenedVisibilityCache {
     public static byte[] flatten(AccessExpression accessExp) {
         byte[] visBytes = flattenedVisCache.get(accessExp);
         if (visBytes == null) {
-            visBytes = AccessExpression.of(accessExp.getExpression(), true).getExpression().getBytes(UTF_8);
+            visBytes = AccessExpression.of(accessExp.getExpression()).getExpression().getBytes(UTF_8);
             flattenedVisCache.put(accessExp, visBytes);
         }
         return visBytes;

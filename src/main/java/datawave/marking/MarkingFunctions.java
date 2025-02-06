@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.accumulo.access.AccessExpression;
+import org.apache.accumulo.access.ParsedAccessExpression;
 import org.apache.accumulo.core.data.ByteSequence;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.accumulo.core.security.ColumnVisibility;
@@ -82,8 +83,11 @@ public interface MarkingFunctions {
         
         @Override
         public ColumnVisibility combine(Collection<ColumnVisibility> expressions) {
-            return new ColumnVisibility(AccessExpression.of(expressions.stream().map(ColumnVisibility::getExpression).filter(b -> b.length > 0)
-                            .map(b -> "(" + new String(b, UTF_8) + ")").collect(Collectors.joining("&")).getBytes(UTF_8), true).getExpression());
+            return new ColumnVisibility(
+                            ParsedAccessExpression
+                                            .of(expressions.stream().map(ColumnVisibility::getExpression).filter(b -> b.length > 0)
+                                                            .map(b -> "(" + new String(b, UTF_8) + ")").collect(Collectors.joining("&")).getBytes(UTF_8))
+                                            .getExpression());
         }
         
         @Override
@@ -97,7 +101,7 @@ public interface MarkingFunctions {
         
         @Override
         public ColumnVisibility translateToColumnVisibility(Map<String,String> markings) {
-            return new ColumnVisibility(AccessExpression.of(markings.get(COLUMN_VISIBILITY), true));
+            return new ColumnVisibility(AccessExpression.of(markings.get(COLUMN_VISIBILITY)));
         }
         
         @Override
