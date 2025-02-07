@@ -23,18 +23,18 @@
         <url>https://github.com/NationalSecurityAgency/datawave-accumulo-utils</url>
     </scm>
     <properties>
-        <version.accumulo>2.1.1</version.accumulo>
+        <version.accumulo>2.1.4-97e4684860</version.accumulo>
         <version.authorization-api>4.0.0</version.authorization-api>
         <version.commons-beanutils>1.9.4</version.commons-beanutils>
         <version.commons-collections>4.4</version.commons-collections>
         <version.dropwizard>4.1.2</version.dropwizard>
         <version.guava>28.1-jre</version.guava>
         <version.in-memory-accumulo>4.0.0</version.in-memory-accumulo>
-        <version.slf4j>1.7.29</version.slf4j>
+        <version.slf4j>2.0.12</version.slf4j>
         <!-- snappy and dropwizard required to allow miniaccumulo to work with upgraded zookeeper -->
         <version.snappy>1.1.7</version.snappy>
         <version.spring>5.3.5</version.spring>
-        <version.zookeeper>3.8.0</version.zookeeper>
+        <version.zookeeper>3.8.3</version.zookeeper>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -94,6 +94,10 @@
                         <groupId>org.apache.hadoop</groupId>
                     </exclusion>
                     <exclusion>
+                        <groupId>org.apache.zookeeper</groupId>
+                        <artifactId>zookeeper-jute</artifactId>
+                    </exclusion>
+                    <exclusion>
                         <artifactId>*</artifactId>
                         <groupId>org.slf4j</groupId>
                     </exclusion>
@@ -118,9 +122,15 @@
                 <version>${version.commons-collections}</version>
             </dependency>
             <dependency>
+                <groupId>org.xerial.snappy</groupId>
+                <artifactId>snappy-java</artifactId>
+                <version>${version.snappy}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.zookeeper</groupId>
                 <artifactId>zookeeper</artifactId>
                 <version>${version.zookeeper}</version>
+                <scope>provided</scope>
                 <exclusions>
                     <exclusion>
                         <artifactId>slf4j-log4j12</artifactId>
@@ -131,11 +141,6 @@
                         <groupId>log4j</groupId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.xerial.snappy</groupId>
-                <artifactId>snappy-java</artifactId>
-                <version>${version.snappy}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -194,16 +199,17 @@
             <artifactId>commons-collections4</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.zookeeper</groupId>
-            <artifactId>zookeeper</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
         </dependency>
         <dependency>
             <groupId>org.xerial.snappy</groupId>
             <artifactId>snappy-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
