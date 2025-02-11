@@ -83,11 +83,10 @@ public interface MarkingFunctions {
         
         @Override
         public ColumnVisibility combine(Collection<ColumnVisibility> expressions) {
-            return new ColumnVisibility(
-                            ParsedAccessExpression
-                                            .of(expressions.stream().map(ColumnVisibility::getExpression).filter(b -> b.length > 0)
-                                                            .map(b -> "(" + new String(b, UTF_8) + ")").collect(Collectors.joining("&")).getBytes(UTF_8))
-                                            .getExpression());
+            String combined = expressions.stream().map(ColumnVisibility::getExpression).filter(b -> b.length > 0).map(b -> "(" + new String(b, UTF_8) + ")")
+                            .collect(Collectors.joining("&"));
+            var parsed = AccessExpression.parse(combined);
+            return new ColumnVisibility(FlattenedVisibilityCache.flatten(parsed));
         }
         
         @Override
@@ -101,7 +100,9 @@ public interface MarkingFunctions {
         
         @Override
         public ColumnVisibility translateToColumnVisibility(Map<String,String> markings) {
-            return new ColumnVisibility(AccessExpression.of(markings.get(COLUMN_VISIBILITY)));
+            ColumnVisibility cv = new ColumnVisibility(markings.get(COLUMN_VISIBILITY));
+            var parsed = AccessExpression.parse(markings.get(COLUMN_VISIBILITY));
+            return new ColumnVisibility(FlattenedVisibilityCache.flatten(parsed));
         }
         
         @Override
@@ -123,7 +124,8 @@ public interface MarkingFunctions {
         
         @Override
         public byte[] flatten(ColumnVisibility vis) {
-            return FlattenedVisibilityCache.flatten(AccessExpression.of(vis.getExpression()));
+            var parsed = AccessExpression.parse(vis.getExpression());
+            return FlattenedVisibilityCache.flatten(parsed);
         }
         
     }
