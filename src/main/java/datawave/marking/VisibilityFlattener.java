@@ -15,7 +15,7 @@ public class VisibilityFlattener {
         flatten(root.parse(), out, sort);
         return AccessExpression.of(out.toString());
     }
-
+    
     private static int ordinal(ParsedAccessExpression accessExpression) {
         switch (accessExpression.getType()) {
             case EMPTY:
@@ -28,10 +28,10 @@ public class VisibilityFlattener {
                 return 4;
             default:
                 throw new IllegalArgumentException(accessExpression.getType().name());
-
+            
         }
     }
-
+    
     // This comparison logic is taken directly from ColumnVisibility.NodeComparator in order to have the same behavior.
     private static int compare(ParsedAccessExpression a, ParsedAccessExpression b) {
         int diff = ordinal(a) - ordinal(b);
@@ -55,10 +55,10 @@ public class VisibilityFlattener {
                     }
                 }
         }
-
+        
         return 0;
     }
-
+    
     private static void flatten(ParsedAccessExpression root, StringBuilder out, boolean sort) {
         if (root.getType() == AUTHORIZATION)
             out.append(root.getExpression());

@@ -21,19 +21,19 @@ import org.apache.accumulo.core.data.ByteSequence;
  */
 public class FlattenedVisibilityCache {
     private static Map<AccessExpression,byte[]> flattenedVisCache = Collections.synchronizedMap(new HashMap<>());
-
+    
     /**
      * As part of normalizing access expression this class is used to sort and dedupe sub-expressions in a tree set.
      */
     public static class NormalizedExpression implements Comparable<NormalizedExpression> {
         public final String expression;
         public final ParsedAccessExpression.ExpressionType type;
-
+        
         NormalizedExpression(String expression, ParsedAccessExpression.ExpressionType type) {
             this.expression = expression;
             this.type = type;
         }
-
+        
         // determines the sort order of different kinds of subexpressions.
         private static int typeOrder(ParsedAccessExpression.ExpressionType type) {
             switch (type) {
@@ -47,7 +47,7 @@ public class FlattenedVisibilityCache {
                     throw new IllegalArgumentException("Unexpected type " + type);
             }
         }
-
+        
         @Override
         public int compareTo(NormalizedExpression o) {
             // Changing this comparator would significantly change how expressions are normalized.
@@ -59,11 +59,11 @@ public class FlattenedVisibilityCache {
                 } else {
                     cmp = expression.compareTo(o.expression);
                 }
-
+                
             }
             return cmp;
         }
-
+        
         @Override
         public boolean equals(Object o) {
             if (o instanceof NormalizedExpression) {
@@ -71,13 +71,13 @@ public class FlattenedVisibilityCache {
             }
             return false;
         }
-
+        
         @Override
         public int hashCode() {
             return expression.hashCode();
         }
     }
-
+    
     /**
      * This method helps with the flattening aspect of normalization by recursing down as far as possible the parse tree in the case when the expression type is
      * the same. As long as the type is the same in the sub expression, keep using the same tree set.
@@ -93,7 +93,7 @@ public class FlattenedVisibilityCache {
             normalizedExpressions.add(normalize(parsed));
         }
     }
-
+    
     /**
      * <p>
      * For a given access expression this example will deduplicate, sort, flatten, and remove unneeded parentheses or quotes in the expressions. The following
@@ -126,15 +126,15 @@ public class FlattenedVisibilityCache {
             for (var child : parsed.getChildren()) {
                 flatten(parsed.getType(), child, normalizedChildren);
             }
-
+            
             if (normalizedChildren.size() == 1) {
                 return normalizedChildren.first();
             } else {
                 String operator = parsed.getType() == AND ? "&" : "|";
                 String sep = "";
-
+                
                 StringBuilder builder = new StringBuilder();
-
+                
                 for (var child : normalizedChildren) {
                     builder.append(sep);
                     if (child.type == AUTHORIZATION) {
@@ -146,12 +146,12 @@ public class FlattenedVisibilityCache {
                     }
                     sep = operator;
                 }
-
+                
                 return new NormalizedExpression(builder.toString(), parsed.getType());
             }
         }
     }
-
+    
     /**
      * Create a flattened expression, using the cache if possible
      *
@@ -170,7 +170,7 @@ public class FlattenedVisibilityCache {
         }
         return visBytes;
     }
-
+    
     public static byte[] flatten(ByteSequence bytes) {
         return flatten(ColumnVisibilityCache.getExpression(bytes));
     }

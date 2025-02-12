@@ -100,7 +100,6 @@ public interface MarkingFunctions {
         
         @Override
         public ColumnVisibility translateToColumnVisibility(Map<String,String> markings) {
-            ColumnVisibility cv = new ColumnVisibility(markings.get(COLUMN_VISIBILITY));
             var parsed = AccessExpression.parse(markings.get(COLUMN_VISIBILITY));
             return new ColumnVisibility(FlattenedVisibilityCache.flatten(parsed));
         }
