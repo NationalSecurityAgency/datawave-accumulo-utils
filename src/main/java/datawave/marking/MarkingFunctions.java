@@ -4,12 +4,11 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+import org.apache.accumulo.access.AccessExpression;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.commons.beanutils.BeanUtils;
@@ -78,19 +77,45 @@ public interface MarkingFunctions {
         @Override
         public ColumnVisibility combine(Collection<ColumnVisibility> expressions) {
             
-            // filter out any empty expressions, then flatten each one (to de-dupe) and concatenate with '&'
-            // flatten the final combined ColumnVisibility and use that to make the ColumnVisibility to return
-            return new ColumnVisibility(new ColumnVisibility(expressions.stream().map(ColumnVisibility::flatten).filter(b -> b.length > 0)
-                            .map(b -> "(" + new String(b, UTF_8) + ")").collect(Collectors.joining("&")).getBytes(UTF_8)).flatten());
+            // filter out any empty expressions, then concatenate with '&' and flatten the final combined ColumnVisibility to return
+            StringBuilder builder = new StringBuilder();
+            String sep = "";
+            for (ColumnVisibility visibility : expressions) {
+                if (visibility.getExpression().length > 0) {
+                    builder.append(sep);
+                    sep = "&";
+                    builder.append("(");
+                    builder.append(new String(visibility.getExpression(), UTF_8));
+                    builder.append(")");
+                }
+            }
+            var parsed = AccessExpression.parse(builder.toString());
+            return new ColumnVisibility(FlattenedVisibilityCache.flatten(parsed));
         }
         
         @Override
         @SafeVarargs
         public final Map<String,String> combine(Map<String,String>... markings) {
-            // translate COLUMN_VISIBILITY values to ColumnVisibility, combine them and
-            // return translated back to Map
-            return translateFromColumnVisibility(combine(Arrays.stream(markings).filter(m -> m.containsKey(COLUMN_VISIBILITY))
-                            .map(this::translateToColumnVisibility).collect(Collectors.toSet())));
+            
+            StringBuilder builder = new StringBuilder();
+            String sep = "";
+            for (Map<String,String> marking : markings) {
+                if (marking.containsKey(COLUMN_VISIBILITY)) {
+                    String expression = marking.get(COLUMN_VISIBILITY);
+                    if (expression != null && !expression.isBlank()) {
+                        builder.append(sep);
+                        sep = "&";
+                        builder.append("(");
+                        builder.append(expression);
+                        builder.append(")");
+                    }
+                }
+            }
+            var parsed = AccessExpression.parse(builder.toString());
+            var combinedViz = new ColumnVisibility(FlattenedVisibilityCache.flatten(parsed));
+            Map<String,String> combinedMarkings = Maps.newHashMap();
+            combinedMarkings.put(COLUMN_VISIBILITY, new String(combinedViz.getExpression(), UTF_8));
+            return combinedMarkings;
         }
         
         @Override
@@ -106,11 +131,13 @@ public interface MarkingFunctions {
             return markings;
         }
         
+        // If not used, could be removed
         @Override
         public Map<String,String> translateFromColumnVisibilityForAuths(ColumnVisibility columnVisibility, Collection<Authorizations> authorizations) {
             return translateFromColumnVisibility(columnVisibility);
         }
         
+        // If not used, could be removed
         @Override
         public Map<String,String> translateFromColumnVisibilityForAuths(ColumnVisibility columnVisibility, Authorizations authorizations) {
             return translateFromColumnVisibility(columnVisibility);
