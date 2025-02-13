@@ -145,7 +145,8 @@ public interface MarkingFunctions {
         
         @Override
         public byte[] flatten(ColumnVisibility vis) {
-            return FlattenedVisibilityCache.flatten(vis);
+            var parsed = AccessExpression.parse(vis.getExpression());
+            return FlattenedVisibilityCache.flatten(parsed);
         }
         
     }

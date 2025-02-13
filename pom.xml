@@ -24,6 +24,7 @@
     </scm>
     <properties>
         <version.accumulo>2.1.4-97e4684860</version.accumulo>
+        <version.accumulo-access>1.0.0-datawave-3</version.accumulo-access>
         <version.authorization-api>4.0.0</version.authorization-api>
         <version.commons-beanutils>1.9.4</version.commons-beanutils>
         <version.commons-collections>4.4</version.commons-collections>
@@ -63,6 +64,11 @@
                         <groupId>org.slf4j</groupId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.accumulo</groupId>
+                <artifactId>accumulo-access</artifactId>
+                <version>${version.accumulo-access}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.accumulo</groupId>
@@ -189,6 +195,10 @@
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.accumulo</groupId>
+            <artifactId>accumulo-access</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.accumulo</groupId>
