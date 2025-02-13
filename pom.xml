@@ -28,7 +28,7 @@
         <version.commons-beanutils>1.9.4</version.commons-beanutils>
         <version.commons-collections>4.4</version.commons-collections>
         <version.dropwizard>4.1.2</version.dropwizard>
-        <version.guava>28.1-jre</version.guava>
+        <version.guava>32.0.0-jre</version.guava>
         <version.in-memory-accumulo>4.0.0</version.in-memory-accumulo>
         <version.slf4j>1.7.29</version.slf4j>
         <!-- snappy and dropwizard required to allow miniaccumulo to work with upgraded zookeeper -->
