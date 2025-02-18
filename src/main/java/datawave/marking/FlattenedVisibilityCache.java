@@ -6,6 +6,8 @@ import static org.apache.accumulo.access.AccessExpression.unquote;
 import static org.apache.accumulo.access.ParsedAccessExpression.ExpressionType.AND;
 import static org.apache.accumulo.access.ParsedAccessExpression.ExpressionType.AUTHORIZATION;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +15,9 @@ import java.util.TreeSet;
 
 import org.apache.accumulo.access.AccessExpression;
 import org.apache.accumulo.access.ParsedAccessExpression;
+import org.apache.accumulo.core.data.ArrayByteSequence;
 import org.apache.accumulo.core.data.ByteSequence;
+import org.apache.accumulo.core.security.ColumnVisibility;
 
 /**
  * This is a cache that can be used per process to save flattened visibility calculations.
@@ -82,7 +86,7 @@ public class FlattenedVisibilityCache {
      * This method helps with the flattening aspect of normalization by recursing down as far as possible the parse tree in the case when the expression type is
      * the same. As long as the type is the same in the sub expression, keep using the same tree set.
      */
-    public static void flatten(ParsedAccessExpression.ExpressionType parentType, ParsedAccessExpression parsed,
+    private static void flatten(ParsedAccessExpression.ExpressionType parentType, ParsedAccessExpression parsed,
                     TreeSet<NormalizedExpression> normalizedExpressions) {
         if (parsed.getType() == parentType) {
             for (var child : parsed.getChildren()) {
@@ -113,7 +117,7 @@ public class FlattenedVisibilityCache {
      * This algorithm attempts to have the same behavior as the one in the Accumulo 2.1 ColumnVisibility class. However the implementation is very different.
      * </p>
      */
-    public static NormalizedExpression normalize(ParsedAccessExpression parsed) {
+    private static NormalizedExpression normalize(ParsedAccessExpression parsed) {
         if (parsed.getType() == AUTHORIZATION) {
             // If the authorization is quoted and it does not need to be quoted then the following two
             // lines will remove the unnecessary quoting.
@@ -173,5 +177,13 @@ public class FlattenedVisibilityCache {
     
     public static byte[] flatten(ByteSequence bytes) {
         return flatten(ColumnVisibilityCache.getExpression(bytes));
+    }
+    
+    public static byte[] flatten(String expression) {
+        return flatten(ColumnVisibilityCache.getExpression(new ArrayByteSequence(expression)));
+    }
+    
+    public static byte[] flatten(ColumnVisibility expression) {
+        return flatten(ColumnVisibilityCache.getExpression(new ArrayByteSequence(expression.getExpression())));
     }
 }

@@ -4,11 +4,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import org.apache.accumulo.access.AccessExpression;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.commons.beanutils.BeanUtils;
@@ -91,8 +92,7 @@ public interface MarkingFunctions {
                     builder.append(")");
                 }
             }
-            var parsed = AccessExpression.parse(builder.toString());
-            return new ColumnVisibility(FlattenedVisibilityCache.flatten(parsed));
+            return new ColumnVisibility(FlattenedVisibilityCache.flatten(builder.toString()));
         }
         
         @Override
@@ -113,8 +113,7 @@ public interface MarkingFunctions {
                     }
                 }
             }
-            var parsed = AccessExpression.parse(builder.toString());
-            var combinedViz = new ColumnVisibility(FlattenedVisibilityCache.flatten(parsed));
+            var combinedViz = new ColumnVisibility(FlattenedVisibilityCache.flatten(builder.toString()));
             Map<String,String> combinedMarkings = Maps.newHashMap();
             combinedMarkings.put(COLUMN_VISIBILITY, new String(combinedViz.getExpression(), UTF_8));
             return combinedMarkings;
@@ -122,8 +121,7 @@ public interface MarkingFunctions {
         
         @Override
         public ColumnVisibility translateToColumnVisibility(Map<String,String> markings) {
-            var parsed = AccessExpression.parse(markings.get(COLUMN_VISIBILITY));
-            return new ColumnVisibility(FlattenedVisibilityCache.flatten(parsed));
+            return new ColumnVisibility(FlattenedVisibilityCache.flatten(markings.get(COLUMN_VISIBILITY)));
         }
         
         @Override
@@ -147,8 +145,7 @@ public interface MarkingFunctions {
         
         @Override
         public byte[] flatten(ColumnVisibility vis) {
-            var parsed = AccessExpression.parse(vis.getExpression());
-            return FlattenedVisibilityCache.flatten(parsed);
+            return FlattenedVisibilityCache.flatten(vis);
         }
         
     }
@@ -172,7 +169,7 @@ public interface MarkingFunctions {
         
         /**
          * Turn a set of markings into a serializable string
-         * 
+         *
          * @param markings
          *            the markings map to convert to a string
          * @return a serialized String version of {@code markings}
@@ -189,7 +186,7 @@ public interface MarkingFunctions {
         
         /**
          * Turn a serialized set of markings into a map
-         * 
+         *
          * @param encodedMarkings
          *            the serialized String markings to convert back to a markings Map
          * @return a {@link Map} of the de-serialized markings from {@code encodedMarkings}
